@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Aşkım ❤️</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: #ffeef2;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      transition: background-color 0.8s ease-in-out;
+    }
+
+    h1, #question, .buttons, #gifContainer {
+      position: relative;
+      z-index: 2;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #d6336c;
+      margin-bottom: 1rem;
+    }
+
+    #question {
+      font-size: 1.5rem;
+      margin: 1rem;
+      color: #333;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 0.5rem 1.5rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #yesBtn {
+      background-color: #ff4d6d;
+      color: white;
+      font-weight: bold;
+      animation: pulse 2s infinite;
+      transform: scale(1);
+    }
+
+    #noBtn {
+      background-color: #dee2e6;
+      color: #333;
+      transform-origin: center;
+      animation: shake 0.4s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      50% { transform: translateX(4px); }
+      75% { transform: translateX(-4px); }
+      100% { transform: translateX(0); }
+    }
+
+    #gifContainer {
+      margin-top: 2rem;
+      display: none;
+    }
+
+    #yesBtn.big {
+      font-size: 5rem;
+    }
+
+    #sakuraCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    #muteBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #ff6fa1;
+      color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes softFlash {
+      0%   { background-color: #ffeef2; }
+      50%  { background-color: #ffd5e4; }
+      100% { background-color: #ffeef2; }
+    }
+
+    body.flash {
+      animation: softFlash 0.8s ease-in-out;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sakuraCanvas"></canvas>
+
+  <h1 id="mainHeading">nisamm seni üzdüğüm için özür dilerim</h1>
+  <div id="question">Barışalım mı?</div>
+  <div class="buttons">
+    <button id="yesBtn">Evet</button>
+    <button id="noBtn">Hayır</button>
+  </div>
+  <div id="gifContainer"></div>
+
+  <audio id="bgMusic" autoplay loop>
+    <source src="https://media.vocaroo.com/mp3/1aVmj0dGdpvm" type="audio/mpeg" />
+    Tarayıcınız ses öğesini desteklemiyor.
+  </audio>
+  <button id="muteBtn">🔊 Sesi Kapat</button>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const yesBtn = document.getElementById('yesBtn');
+    const question = document.getElementById('question');
+    const gifContainer = document.getElementById('gifContainer');
+    const mainHeading = document.getElementById('mainHeading');
+    const music = document.getElementById('bgMusic');
+    const muteBtn = document.getElementById('muteBtn');
+
+    const texts = [
+      "Emin misin?",
+      "Bence değilsin",
+      "Lütfen evet de",
+      "Seni seviyorum",
+      "Yalvarırım",
+      "Bir kerecik evet de",
+      "Hadi ama aşkım olsun",
+      "Seni çok seviyorum",
+      "Seni çok özledim",
+      "Yalvarırımmm",
+      "Lütfen evet de ne olur"
+    ];
+
+    let index = 0;
+    let yesFontSize = 1.2;
+    let noScale = 1;
+
+    music.volume = 0.1;
+    let isMuted = false;
+
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      music.muted = isMuted;
+      muteBtn.textContent = isMuted ? "🔇 Sesi Aç" : "🔊 Sesi Kapat";
+    });
+
+    noBtn.addEventListener('click', () => {
+      if (index < texts.length) {
+        noBtn.textContent = texts[index];
+        index++;
+      } else {
+        noBtn.textContent = "Yalvarırımmm";
+      }
+
+      yesFontSize *= 1.4;
+      yesBtn.style.fontSize = yesFontSize + 'rem';
+
+      noScale *= 0.85;
+      noBtn.style.transform = `scale(${noScale})`;
+      if (noScale <= 0.02) {
+        noBtn.style.display = 'none';
+      }
+
+      document.body.classList.add('flash');
+      setTimeout(() => {
+        document.body.classList.remove('flash');
+      }, 800);
+    });
+
+    yesBtn.addEventListener('click', () => {
+      mainHeading.style.display = 'none';
+      question.textContent = "Evet diyeceğini biliyordumm teşekkür ederimmm ❤️";
+      question.style.color = "#ff6fa1";
+      question.style.fontWeight = "bold";
+      gifContainer.style.display = 'block';
+
+      gifContainer.innerHTML = '';
+      const newGif = document.createElement('img');
+      newGif.src = 'https://i.pinimg.com/originals/d7/d2/cd/d7d2cd60810a40afc13351e53717a7ba.gif';
+      newGif.alt = 'Sevgi Gifi';
+      newGif.style.width = '400px';
+      newGif.style.maxWidth = '95vw';
+      newGif.style.display = 'block';
+      newGif.style.margin = '0 auto';
+      gifContainer.appendChild(newGif);
+
+      yesBtn.classList.add('big');
+      noBtn.style.display = 'none';
+      yesBtn.style.display = 'none';
+    });
+
+    const canvas = document.getElementById('sakuraCanvas');
+    const ctx = canvas.getContext('2d');
+    let sakuraList = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function createSakura() {
+      const size = Math.random() * 15 + 10;
+      return {
+        x: Math.random() * canvas.width,
+        y: -size,
+        size: size,
+        speed: Math.random() * 1 + 0.5,
+        drift: (Math.random() - 0.5) * 2,
+        rotation: Math.random() * 360,
+        rotationSpeed: Math.random() * 2 - 1
+      };
+    }
+
+    function drawSakura(s) {
+      ctx.save();
+      ctx.translate(s.x, s.y);
+      ctx.rotate((s.rotation * Math.PI) / 180);
+      ctx.fillStyle = 'rgba(255, 182, 193, 0.8)';
+      ctx.beginPath();
+      ctx.moveTo(0, 0 - s.size / 2);
+      for (let i = 1; i < 5; i++) {
+        const angle = i * (Math.PI * 2) / 5;
+        ctx.lineTo(Math.cos(angle) * s.size / 2, Math.sin(angle) * s.size / 2);
+      }
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function updateSakura() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (sakuraList.length < 60) {
+        sakuraList.push(createSakura());
+      }
+      for (let i = 0; i < sakuraList.length; i++) {
+        const s = sakuraList[i];
+        s.y += s.speed;
+        s.x += s.drift;
+        s.rotation += s.rotationSpeed;
+
+        if (s.y > canvas.height + s.size) {
+          sakuraList[i] = createSakura();
+        }
+        drawSakura(s);
+      }
+      requestAnimationFrame(updateSakura);
+    }
+
+    updateSakura();
+  </script>
+</body>
+</html>
