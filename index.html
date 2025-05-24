@@ -85,6 +85,20 @@
       z-index: 1;
     }
 
+    #muteBtn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 10px 15px;
+      border: none;
+      background-color: #ff6fa1;
+      color: white;
+      border-radius: 10px;
+      font-weight: bold;
+      cursor: pointer;
+      z-index: 3;
+    }
+
     @keyframes pulse {
       0% { transform: scale(1); }
       50% { transform: scale(1.07); }
@@ -117,6 +131,7 @@
     <source src="https://media.vocaroo.com/mp3/1aVmj0dGdpvm" type="audio/mpeg" />
     Tarayıcınız ses öğesini desteklemiyor.
   </audio>
+  <button id="muteBtn">🔊 Sesi Kapat</button>
 
   <script>
     const noBtn = document.getElementById('noBtn');
@@ -125,6 +140,7 @@
     const gifContainer = document.getElementById('gifContainer');
     const mainHeading = document.getElementById('mainHeading');
     const music = document.getElementById('bgMusic');
+    const muteBtn = document.getElementById('muteBtn');
 
     const texts = [
       "Emin misin?",
@@ -145,6 +161,13 @@
     let noScale = 1;
 
     music.volume = 0.1;
+    let isMuted = false;
+
+    muteBtn.addEventListener('click', () => {
+      isMuted = !isMuted;
+      music.muted = isMuted;
+      muteBtn.textContent = isMuted ? "🔇 Sesi Aç" : "🔊 Sesi Kapat";
+    });
 
     noBtn.addEventListener('click', () => {
       if (index < texts.length) {
